@@ -110,7 +110,7 @@ Most of the dependencies should be successfully installed using this and if bs4 
 
 3) One needs to then go to the config file and make the database changes first and then logFile changes.Do not change the location of the config file.
 
-4) For the destination address is it is different we would have to change it in the receiver file. The destination address is the address on which the receiver is continuously listening from the server module. In my database the destination address was http://127.0.0.1:8080/ . If in the user's database it is different then kindly change it in the receiver.py file at line 22 by providing the host and port number.
+4) For the destination address if it is different we would have to change it in the receiver file. The destination address is the address on which the receiver is continuously listening from the server module. In my database the destination address was http://127.0.0.1:8080/ . If in the user's database it is different then kindly change it in the receiver.py file at line 22 by providing the host and port number.
 My database had the following entries for the routing table.I have provided my database as well in database.db file.
 
 RouteID|Sender|MessageType|Destination|
@@ -134,16 +134,16 @@ Start the server file in one terminal using the command:
 ```
 python app2.py
 ```
-Then start the receiver file
+Then start the receiver file in another
 ```
 python receiver.py
 ```
 These two are flask servers and would continuously run on their own.
-Then run the sender script
+Then run the sender script in the third terminal.
 ```
 python sender.py
 ```
-This would terminate with a response of <Response 200> meaning it successfully executed.
+This would terminate with a response of <Response 200> meaning it successfully executed and server worked.
 
 
 ### Certain Design Approaches and Solid Principles
