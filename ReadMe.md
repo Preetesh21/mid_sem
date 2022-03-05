@@ -108,19 +108,9 @@ pip install -r requirements.txt
 (Note for certain Linux systems it is pip3).
 Most of the dependencies should be successfully installed using this and if bs4 is not then also no worry.
 
-3) One needs to then go to the config file and make the database changes first and then logFile changes.Do not change the location of the config file.
+3) One needs to then go to the config file and make the database changes if needed first and then logFile changes if needed.Do not change the location of the config file.
 
-4) For the destination address if it is different we would have to change it in the receiver file. The destination address is the address on which the receiver is continuously listening from the server module. In my database the destination address was http://127.0.0.1:8080/ . If in the user's database it is different then kindly change it in the receiver.py file at line 22 by providing the host and port number.
-My database had the following entries for the routing table.I have provided my database as well in database.db file.
-
-RouteID|Sender|MessageType|Destination|
---- | --- | --- | --- |
-1|http://127.0.0.1:23001/foo|Validate|http://127.0.0.1:8080|
-2|http://127.0.0.1:58572/|Validate|http://127.0.0.1:8080|
-2|http://127.0.0.1:58572|Validate|http://127.0.0.1:8080|
-
-
-5) After installing the dependencies and making the required changes one needs to run the test file which can be done by using the command:
+4) After installing the dependencies and making the required changes one needs to run the test file which can be done by using the command:
 ```
 coverage run -m pytest test_routes.py
 ```
@@ -144,6 +134,16 @@ Then run the sender script in the third terminal.
 python sender.py
 ```
 This would terminate with a response of <Response 200> meaning it successfully executed and server worked.
+
+5) For the destination address if it is different we would have to change it in the receiver file. The destination address is the address on which the receiver is continuously listening from the server module. In my database the destination address was http://127.0.0.1:8080/ . If in the user's database it is different then kindly change it in the receiver.py file at line 22 by providing the host and port number and then run the file.
+My database had the following entries for the routing table.I have provided my database as well in database.db file.
+
+RouteID|Sender|MessageType|Destination|
+--- | --- | --- | --- |
+1|http://127.0.0.1:23001/foo|Validate|http://127.0.0.1:8080|
+2|http://127.0.0.1:58572/|Validate|http://127.0.0.1:8080|
+2|http://127.0.0.1:58572|Validate|http://127.0.0.1:8080|
+
 
 
 ### Certain Design Approaches and Solid Principles
