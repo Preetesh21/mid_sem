@@ -1,3 +1,4 @@
+# importing libraries
 import requests
 import xmltodict
 import json
@@ -20,6 +21,7 @@ def json_helper(name_list):
     f.close()
     return item_a,item_b
 
+# function which sends the message to the server
 def hello_world():
     xml=read()
     data=xmltodict.parse(xml)

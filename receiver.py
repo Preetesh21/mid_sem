@@ -7,7 +7,7 @@ from flask import Flask,request
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
 app = Flask(__name__)
-
+# receiving requests from server at the destination port.
 @app.route('/', methods=['POST','GET'])
 async def hello_world():
     data=request.data

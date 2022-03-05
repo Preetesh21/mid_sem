@@ -8,14 +8,15 @@ import json
 import sqlite3
 import datetime
 import requests
-
-
+# Here most of the code is following single class principle where each funciton is responsible for one task.
+# connecting to the database 
 def get_db(DATABASE):
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = sqlite3.connect(DATABASE,check_same_thread=False)
     return db
 
+# logging the code onto the log file
 def logger_code(log_file):
     # Create and configure logger
     logging.basicConfig(filename=log_file,
@@ -27,6 +28,7 @@ def logger_code(log_file):
     logger.setLevel(logging.DEBUG)
     return logger
 
+# the json helper function
 def json_helper(name_list):
     f=open("config.json")
     data=json.load(f)
@@ -35,12 +37,14 @@ def json_helper(name_list):
     f.close()
     return item_a,item_b
 
+# asynchronous function responsible for sending the message to the destination
 async def send_message(destination_address,message):
     dictweSend={message:message}
     r= requests.post(destination_address,json=dictweSend)
-    print(r)
+    #print(r)
     return r
 
+# this funciton adds the message logs into the Meessage logs table in DB
 async def add_message_logs(sqliteConnection,cursor,RouteId,EventType,EventTime):
     try:
         data_tuple = (RouteId,EventType,EventTime)
@@ -50,6 +54,7 @@ async def add_message_logs(sqliteConnection,cursor,RouteId,EventType,EventTime):
     except:
         print("Something went wrong")
 
+# this helper function helps in getting the destination address.
 async def helper(db,cur,sender,message_type,message=None):
     routing_cursor = cur.execute('select * from routing where Sender = ? AND MessageType = ?',[sender,message_type])
     
@@ -69,7 +74,8 @@ async def helper(db,cur,sender,message_type,message=None):
             print("Some issue")
         await add_message_logs(db,cur,route_id,"Sent",datetime.datetime.now())
 
-
+# this is the function that wraps the routes and their associated functions and is providing an abstraction
+# the test_routes.py and app.py files. It acts as an interface for both and follows SOLID principles
 def c_app(app):
     # Flask constructor takes the name of 
     # current module (__name__) as argument.
@@ -88,7 +94,7 @@ def c_app(app):
         # here get the sender,message and message_type from HTTP Request
         data=(request.json)
         print(data)
-        print("*************************************************8")
+        #print("*************************************************8")
         message=data['Message']['Body']
         sender=data['Message']['Sender'] 
         message_type=data['Message']['MessageType']
