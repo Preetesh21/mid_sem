@@ -6,11 +6,11 @@ public class database_connection {
     /**
      * Connect to a sample database
      */
-    public static void connect() {
+    public static void connect(String url) {
         Connection conn = null;
         try {
             // db parameters
-            String url = "jdbc:sqlite:/home/hp/Desktop/mid_sem/database.db";
+
             // create a connection to the database
             conn = DriverManager.getConnection(url);
             System.out.println("Connection to SQLite has been established.");
@@ -28,6 +28,8 @@ public class database_connection {
         }
     }
     public static void main(String[] args) {
-        connect();
+
+        String url = "jdbc:sqlite:/home/hp/Desktop/mid_sem/database.db";
+        connect(url);
     }
 }
