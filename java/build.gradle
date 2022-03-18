@@ -16,6 +16,12 @@ dependencies {
     implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
     implementation 'org.json:json:20211205'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    // https://mvnrepository.com/artifact/io.vertx/vertx-web
+    implementation 'io.vertx:vertx-web:4.2.6'
+    // https://mvnrepository.com/artifact/net.dongliu/requests
+    implementation 'net.dongliu:requests:5.0.8'
+
+
 
 }
 
