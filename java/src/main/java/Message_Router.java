@@ -1,3 +1,5 @@
+import io.vertx.ext.web.Router;
+
 import java.util.Map;
 
 public interface Message_Router {
@@ -13,34 +15,31 @@ public interface Message_Router {
 
     /**
      * This is responsible for creating a server and then listening on it from sender
-     * @return Object
      */
-    Object start_server();
+    void start_server(Router router);
 
 
     /**
      * This is responsible for sending the message to the receiver
      * @return Object
      */
-    Object send_request();
+    Object send_request(Router router,String body,String destination);
 
-
+    void helper(Router router, String queryId, String messageType,String body);
     /**
      * Execute an insert statement and return the number of rows
      affected.
      * @param queryId Unique ID of the query in the queries.xml file.
-     * @param queryParam Parameter(s) to be used in the query.
      * @return an int
      */
-    int insert(String queryId, Object queryParam);
+    int insert(String queryId, String EventType);
 
 
     /**
      * Execute a select statement and return the desired values.
      * @param queryId Unique ID of the query in the queries.xml file.
-     * @param queryParam Parameter(s) to be used in the query.
      * @return an Object
      */
-    Object Select(String queryId, Object queryParam);
+    Map<Object, Object> Select(String queryId, String messageType);
 
 }
