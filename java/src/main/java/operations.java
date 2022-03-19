@@ -1,19 +1,18 @@
-import java.io.FileReader;
-import java.sql.*;
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.CorsHandler;
 import net.dongliu.requests.Requests;
-import org.json.simple.*;
-import org.json.simple.parser.*;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.io.FileReader;
+import java.sql.*;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -153,7 +152,6 @@ public class operations implements Message_Router {
 
         // This body handler will be called for all routes
         router.route().handler(BodyHandler.create());
-        router.route().handler(CorsHandler.create("http://127.0.0.1:8080").allowedMethod(HttpMethod.GET));
         operation.start_server(router);
         httpServer.requestHandler(router).listen(port.intValue(),host);
 
