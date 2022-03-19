@@ -7,17 +7,23 @@ import io.vertx.ext.web.handler.BodyHandler;
 import net.dongliu.requests.Requests;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.FileHandler;
 
 public class operations implements Message_Router {
     static Connection connection;
+    static FileHandler fh;
+    public operations() throws IOException {
+    fh = new FileHandler("/home/hp/Desktop/mid_sem_java/java/src/main/resources/LogFile.log");
+    }
+
     public static void connect(String url) {
         Connection conn;
         try {
@@ -26,6 +32,7 @@ public class operations implements Message_Router {
             conn = DriverManager.getConnection(db_url);
             System.out.println("Connection to SQLite has been established.");
             connection = conn;
+            logging.writeLog(fh,"Connection Established");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -47,6 +54,7 @@ public class operations implements Message_Router {
             map.put("DB URL",db_url);
             map.put("Log File",log_file);
             connect(db_url);
+            logging.writeLog(fh,"JSON Parsing done");
             return map;
         } catch(Exception e) {
             e.printStackTrace();
@@ -65,6 +73,7 @@ public class operations implements Message_Router {
                     String sender = jsonObject2.getString("Sender");
                     String MessageType = jsonObject2.getString("MessageType");
                     String body = jsonObject2.getString("Body");
+                    logging.writeLog(fh,"Message Received");
                     response.setStatusCode(200);
                     response.setChunked(true);
                     response.write("Success" );
@@ -76,6 +85,7 @@ public class operations implements Message_Router {
 
     @Override
     public Object send_request(Router router,String body,String destination) {
+        logging.writeLog(fh,"Message Sent to the Receiver");
         return Requests.post(destination).body(body).send().readToText();
     }
 
@@ -84,14 +94,18 @@ public class operations implements Message_Router {
         CompletableFuture.runAsync(() -> {
             Map<Object, Object> map = Select(queryId,messageType);
             System.out.println(map);
+            logging.writeLog(fh,"Found Destination from DB");
             int resp1 = insert( Integer.toString((Integer) map.get("routeID")),"Received");
             System.out.println(resp1);
+            logging.writeLog(fh,"Added Received log in the DB");
             // Send the Request
             Object resp3 = send_request(router,body, (String) map.get("Destination"));
             System.out.println(resp3);
+            logging.writeLog(fh,"Found Destination");
             // Add message log again
             int resp2 = insert( Integer.toString((Integer) map.get("routeID")),"Sent");
             System.out.println(resp2);
+            logging.writeLog(fh,"Added Sent Log in the DB");
         });
     }
 
@@ -137,9 +151,9 @@ public class operations implements Message_Router {
         return map;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         operations operation =  new operations();
-        Map<Object, Object> map = operation.json_parser("/home/hp/Desktop/mid_sem_java/java/src/main/java/config.json");
+        Map<Object, Object> map = operation.json_parser("/home/hp/Desktop/mid_sem_java/java/src/main/resources/config.json");
         System.out.println("Host: " + map.get("Host"));
         System.out.println("Port: " + map.get("Port"));
         System.out.println("DB URL:"+ map.get("DB URL"));
