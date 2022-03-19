@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="operationsTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-03-19T13:22:08" hostname="hp-HP-Laptop-15-da0xxx" time="1.948">
+  <properties/>
+  <testcase name="test_server()" classname="operationsTest" time="1.948"/>
+  <system-out><![CDATA[
+       GOOG,INFY,AAPL
+       
+Message Sent Success
+]]></system-out>
+  <system-err><![CDATA[Mar 19, 2022 6:52:09 PM logging writeLog
+INFO: Connection Established
+Mar 19, 2022 6:52:09 PM logging writeLog
+INFO: JSON Parsing done
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Received
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Found Destination from DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Added Received log in the DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Sent to the Receiver
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Sent
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Added Sent Log in the DB
+]]></system-err>
+</testsuite>
