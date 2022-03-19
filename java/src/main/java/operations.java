@@ -1,20 +1,17 @@
-import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.BodyHandler;
 import net.dongliu.requests.Requests;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.FileHandler;
 
 public class operations implements Message_Router {
@@ -24,24 +21,20 @@ public class operations implements Message_Router {
     fh = new FileHandler("/home/hp/Desktop/mid_sem_java/java/src/main/resources/LogFile.log");
     }
 
-    public static void connect(String url) {
+    public static void connect(String url) throws SQLException {
         Connection conn;
-        try {
-            // create a connection to the database
-            String db_url="jdbc:sqlite:"+url;
-            conn = DriverManager.getConnection(db_url);
-            System.out.println("Connection to SQLite has been established.");
-            connection = conn;
-            logging.writeLog(fh,"Connection Established");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        // create a connection to the database
+        String db_url="jdbc:sqlite:"+url;
+        conn = DriverManager.getConnection(db_url);
+        //System.out.println("Connection to SQLite has been established.");
+        connection = conn;
+        logging.writeLog(fh,"Connection Established");
     }
 
     @Override
-    public  Map<Object, Object> json_parser(String json_file) {
+    public  Map<Object, Object> json_parser(String json_file) throws IOException, ParseException, SQLException {
         JSONParser parser = new JSONParser();
-        try {
+
             Object obj = parser.parse(new FileReader(json_file));
             JSONObject jsonObject = (JSONObject)obj;
             String host = (String)jsonObject.get("host");
@@ -56,10 +49,6 @@ public class operations implements Message_Router {
             connect(db_url);
             logging.writeLog(fh,"JSON Parsing done");
             return map;
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Override
@@ -68,18 +57,18 @@ public class operations implements Message_Router {
                 .handler(routingContext -> {
                     HttpServerResponse response = routingContext.response();
                     JsonObject jsonObject = routingContext.getBodyAsJson();
-                    System.out.println(jsonObject.fieldNames());
+                    //System.out.println(jsonObject.fieldNames());
                     JsonObject jsonObject2 = (jsonObject.getJsonObject("Message"));
                     String sender = jsonObject2.getString("Sender");
                     String MessageType = jsonObject2.getString("MessageType");
                     String body = jsonObject2.getString("Body");
                     logging.writeLog(fh,"Message Received");
+                    helper(router,sender,MessageType,body);
                     response.setStatusCode(200);
                     response.setChunked(true);
                     response.write("Success" );
                     response.end();
-                    System.out.println(sender + MessageType + body);
-                    helper(router,sender,MessageType,body);
+                    //System.out.println(sender + MessageType + body);
                 });
     }
 
@@ -91,40 +80,38 @@ public class operations implements Message_Router {
 
     @Override
     public void helper(Router router, String queryId, String messageType,String body){
-        CompletableFuture.runAsync(() -> {
+       // CompletableFuture.runAsync(() -> {
             Map<Object, Object> map = Select(queryId,messageType);
-            System.out.println(map);
+            //System.out.println(map);
             logging.writeLog(fh,"Found Destination from DB");
-            int resp1 = insert( Integer.toString((Integer) map.get("routeID")),"Received");
-            System.out.println(resp1);
+            insert( Integer.toString((Integer) map.get("routeID")),"Received");
+            //System.out.println(resp1 + "hello wor");
             logging.writeLog(fh,"Added Received log in the DB");
             // Send the Request
             Object resp3 = send_request(router,body, (String) map.get("Destination"));
-            System.out.println(resp3);
-            logging.writeLog(fh,"Found Destination");
+            System.out.println("Message Sent "+resp3);
+            logging.writeLog(fh,"Message Sent");
             // Add message log again
-            int resp2 = insert( Integer.toString((Integer) map.get("routeID")),"Sent");
-            System.out.println(resp2);
+            insert( Integer.toString((Integer) map.get("routeID")),"Sent");
+            //System.out.println(resp2);
             logging.writeLog(fh,"Added Sent Log in the DB");
-        });
+        //});
     }
 
     @Override
-    public int insert(String routeId, String EventType) {
-        AtomicInteger count = new AtomicInteger();
+    public void insert(String routeId, String EventType) {
          String sql = "INSERT INTO message_logs(RouteID, EventType, EventTime) VALUES (?, ?, ?)";
          // set the values
             try{
                 PreparedStatement pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1,routeId);
                 pstmt.setString(2,EventType);
-                System.out.println(Timestamp.from(Instant.now()));
+                //System.out.println(Timestamp.from(Instant.now()));
                 pstmt.setString(3, String.valueOf(Timestamp.from(Instant.now())));
-                count.set(pstmt.executeUpdate());
+                pstmt.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        return count.get();
     }
 
     @Override
@@ -141,7 +128,7 @@ public class operations implements Message_Router {
                 ResultSet rs = pstmt.executeQuery();
 
                 while (rs.next()) {
-                    System.out.println(rs.getString("Destination"));
+                    //System.out.println(rs.getString("Destination"));
                     map.put("Destination",rs.getString("Destination"));
                     map.put("routeID",rs.getInt("RouteID"));
                 }
@@ -149,25 +136,5 @@ public class operations implements Message_Router {
                 e.printStackTrace();
             }
         return map;
-    }
-
-    public static void main(String[] args) throws IOException {
-        operations operation =  new operations();
-        Map<Object, Object> map = operation.json_parser("/home/hp/Desktop/mid_sem_java/java/src/main/resources/config.json");
-        System.out.println("Host: " + map.get("Host"));
-        System.out.println("Port: " + map.get("Port"));
-        System.out.println("DB URL:"+ map.get("DB URL"));
-        System.out.println("Log File:"+ map.get("Log File"));
-        Vertx vertx = Vertx.vertx();
-        HttpServer httpServer = vertx.createHttpServer();
-        Router router = Router.router(vertx);
-        Long port = (Long)map.get("Port");
-        String host= (String) map.get("Host");
-
-        // This body handler will be called for all routes
-        router.route().handler(BodyHandler.create());
-        operation.start_server(router);
-        httpServer.requestHandler(router).listen(port.intValue(),host);
-
     }
 }

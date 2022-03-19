@@ -1,5 +1,8 @@
 import io.vertx.ext.web.Router;
+import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Map;
 
 public interface Message_Router {
@@ -11,7 +14,7 @@ public interface Message_Router {
      * @return Object a Map instance
      **/
 
-    Map<Object, Object> json_parser(String json_file);
+    Map<Object, Object> json_parser(String json_file) throws IOException, ParseException, SQLException;
 
     /**
      * This is responsible for creating a server and then listening on it from sender
@@ -41,10 +44,9 @@ public interface Message_Router {
      * Execute an insert statement and return the number of rows
      affected.
      * @param queryId Unique ID of the query in the queries.xml file.
-     * @return an int
      */
 
-    int insert(String queryId, String EventType);
+    void insert(String queryId, String EventType);
 
     /**
      * Execute a select statement and return the desired values.
