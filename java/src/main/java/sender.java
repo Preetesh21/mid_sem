@@ -1,7 +1,7 @@
 import net.dongliu.requests.Requests;
 public class sender {
 
-    public static void main(String[] args) {
+    public static String main() {
         String xmlString = "<Message>\n" +
                 "    <!-- It is the service’s endpoint URL. -->\n" +
                 "    <Sender>http://127.0.0.1:58572/</Sender>\n" +
@@ -21,7 +21,7 @@ public class sender {
         String host= "127.0.0.1:";
         String port= "5000";
         String destination ="http://"+host+port;
-        String r= Requests.post(destination).body(xml_parser.xml_to_json(xmlString)).send().readToText();
-        System.out.println(r);
+        //System.out.println(r);
+        return Requests.post(destination).body(xml_parser.xml_to_json(xmlString)).send().readToText();
     }
 }

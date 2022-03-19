@@ -18,7 +18,7 @@ public class receiver {
             });
     }
 
-    public static void main(String[] args) {
+    public static void main() {
         Vertx vertx = Vertx.vertx();
         HttpServer httpServer = vertx.createHttpServer();
         Router router = Router.router(vertx);
