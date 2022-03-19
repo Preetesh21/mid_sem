@@ -67,7 +67,7 @@ This is the logging file used by me.
 The technology stack used by me is Java + JUnit + Vertx + IntelliJ .
 The procedure to work on the assignment is as follows:
 1) Download the zip file.
-2) Extract the contents of the zip file and then create a virtual python environment (not necessary ) using the run button.
+2) Open the code in IntelliJ.
 
 5) For the destination address if it is different we would have to change it in the receiver file. The destination address is the address on which the receiver is continuously listening from the server module. In my database the destination address was http://127.0.0.1:8080/ . If in the user's database it is different then kindly change it in the receiver.java file at line 22 by providing the host and port number and then run the file.
 My database had the following entries for the routing table.I have provided my database as well in database.db file.
