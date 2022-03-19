@@ -33,7 +33,7 @@ public class operations implements Message_Router {
     }
 
     @Override
-    public Map<Object, Object> json_parser(String json_file) {
+    public  Map<Object, Object> json_parser(String json_file) {
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader(json_file));
@@ -66,8 +66,9 @@ public class operations implements Message_Router {
                     String sender = jsonObject2.getString("Sender");
                     String MessageType = jsonObject2.getString("MessageType");
                     String body = jsonObject2.getString("Body");
+                    response.setStatusCode(200);
                     response.setChunked(true);
-                    response.write("Hi" );
+                    response.write("Success" );
                     response.end();
                     System.out.println(sender + MessageType + body);
                     helper(router,sender,MessageType,body);
