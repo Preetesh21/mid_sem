@@ -1,0 +1,48 @@
+Mar 19, 2022 6:52:09 PM logging writeLog
+INFO: Connection Established
+Mar 19, 2022 6:52:09 PM logging writeLog
+INFO: JSON Parsing done
+Mar 19, 2022 6:52:09 PM logging writeLog
+INFO: JSON Parsing done
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Received
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Found Destination from DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Found Destination from DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Added Received log in the DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Added Received log in the DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Added Received log in the DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Sent to the Receiver
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Sent to the Receiver
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Sent to the Receiver
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Sent to the Receiver
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Sent
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Sent
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Sent
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Sent
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Message Sent
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Added Sent Log in the DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Added Sent Log in the DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Added Sent Log in the DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Added Sent Log in the DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Added Sent Log in the DB
+Mar 19, 2022 6:52:10 PM logging writeLog
+INFO: Added Sent Log in the DB
